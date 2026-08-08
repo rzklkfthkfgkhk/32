@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный Аниме Кинотеатр</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="logo" id="logo-btn">Anime<span>VLC</span></div>
+        <div class="search-filter-container">
+            <input type="text" id="search-input" placeholder="Поиск аниме...">
+            <select id="genre-select">
+                <option value="">Все жанры</option>
+                <!-- Жанры будут загружены динамически через JS -->
+            </select>
+        </div>
+    </header>
+
+    <!-- Главная секция со списком -->
+    <main class="container">
+        <div id="anime-grid" class="anime-grid">
+            <!-- Карточки аниме вставляются сюда через JS -->
+        </div>
+        <div id="loading" class="loading">Загрузка тайтлов...</div>
+    </main>
+
+    <!-- Модальное окно для детальной информации -->
+    <div id="anime-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Контент модального окна генерируется в JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
