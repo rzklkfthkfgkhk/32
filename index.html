@@ -3,132 +3,71 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AnimeFlix · Автоплеер</title>
+    <title>AnimeHub - Смотреть аниме</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
     <div class="app">
-        <!-- Шапка -->
+        <!-- Header -->
         <header class="header">
-            <div class="logo" id="logoLink" style="cursor:pointer;">
-                <i class="fas fa-film"></i>
-                <span>Anime<span class="highlight">Flix</span></span>
-                <span style="font-size:12px;color:#64748b;font-weight:400;margin-left:8px;">
-                    <i class="fas fa-home"></i>
-                </span>
+            <div class="logo" id="logoLink">
+                <i class="fas fa-play-circle"></i>
+                <span>Anime<span>Hub</span></span>
             </div>
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        placeholder="Поиск аниме... (например: Attack on Titan)" 
-                        autocomplete="off"
-                    />
-                    <button id="searchBtn" class="search-btn">
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Найти аниме..." />
+                <button id="searchBtn"><i class="fas fa-arrow-right"></i></button>
             </div>
         </header>
 
-        <!-- Статистика -->
-        <div class="stats-bar">
-            <div class="stat-item">
-                <i class="fas fa-database"></i>
-                <span>AniList GraphQL</span>
-            </div>
-            <div class="stat-item">
-                <i class="fas fa-video"></i>
-                <span>Автоплеер</span>
-            </div>
-            <div class="stat-item" id="resultCount">
-                <i class="fas fa-list"></i>
-                <span>0 аниме</span>
-            </div>
+        <!-- Stats -->
+        <div class="stats">
+            <span><i class="fas fa-database"></i> AniList</span>
+            <span><i class="fas fa-play"></i> Встроенный плеер</span>
+            <span id="count"><i class="fas fa-list"></i> 0</span>
         </div>
 
-        <!-- Сетка аниме -->
-        <div id="animeGrid" class="anime-grid">
-            <div class="empty-state" id="emptyState">
-                <i class="fas fa-search fa-3x"></i>
-                <h3>Найдите любимое аниме</h3>
-                <p>Введите название в поисковую строку</p>
-            </div>
-        </div>
+        <!-- Grid -->
+        <div id="grid" class="grid"></div>
 
-        <!-- Плеер -->
-        <div id="playerSection" class="player-section hidden">
-            <div class="player-header">
+        <!-- Player -->
+        <div id="player" class="player hidden">
+            <div class="player-top">
                 <div class="player-title">
                     <i class="fas fa-play-circle"></i>
-                    <h2 id="playerTitle">Сейчас играет</h2>
+                    <h2 id="playerTitle">Название</h2>
                 </div>
-                <div style="display:flex;gap:8px;">
-                    <button id="goHomeBtn" class="close-player" title="На главную">
-                        <i class="fas fa-home"></i>
-                    </button>
-                    <button id="closePlayerBtn" class="close-player" title="Закрыть">
-                        <i class="fas fa-times"></i>
-                    </button>
+                <div class="player-btns">
+                    <button onclick="window.goHome()" title="На главную"><i class="fas fa-home"></i></button>
+                    <button id="closePlayer" title="Закрыть"><i class="fas fa-times"></i></button>
                 </div>
             </div>
 
-            <!-- Управление сериями -->
             <div class="player-controls">
-                <div class="control-group">
+                <div class="episode-select">
                     <label><i class="fas fa-list"></i> Серия:</label>
-                    <select id="episodeSelect">
-                        <option value="1">Серия 1</option>
-                    </select>
+                    <select id="episodeSelect"></select>
                 </div>
-                <div class="control-group">
-                    <span class="source-indicator">
-                        <i class="fas fa-sync-alt fa-spin"></i>
-                        Автоматическая загрузка...
-                    </span>
+                <div class="source-info" id="sourceInfo">
+                    <i class="fas fa-sync-alt fa-spin"></i> Загрузка...
                 </div>
             </div>
 
-            <!-- Embed плеер -->
-            <div id="embedContainer">
-                <div class="player-wrapper">
-                    <iframe 
-                        id="embedFrame"
-                        src="" 
-                        allowfullscreen 
-                        loading="lazy"
-                        allow="encrypted-media; autoplay; fullscreen"
-                        sandbox="allow-scripts allow-same-origin allow-presentation allow-forms allow-popups"
-                    ></iframe>
-                </div>
+            <div class="player-wrapper">
+                <iframe id="playerFrame" src="" allowfullscreen></iframe>
             </div>
 
-            <!-- Статус -->
-            <div id="playerStatus" class="player-status info">
-                <i class="fas fa-info-circle"></i>
-                Выберите аниме для просмотра
-            </div>
-
-            <!-- Информация -->
-            <div class="player-footer">
-                <span><i class="fas fa-check-circle" style="color: #34d399;"></i> Автоматический плеер</span>
-                <span><i class="fas fa-infinity"></i> Без токенов</span>
-                <span><i class="fas fa-play"></i> Работает сразу</span>
-                <span><i class="fas fa-sync"></i> 7+ источников</span>
+            <div class="player-status" id="playerStatus">
+                <i class="fas fa-info-circle"></i> Выберите аниме
             </div>
         </div>
 
-        <!-- Футер -->
+        <!-- Footer -->
         <footer class="footer">
-            <p>
-                <i class="fas fa-code"></i> 
-                Данные от <a href="https://anilist.co" target="_blank">AniList</a> · 
-                Автоматический плеер
-            </p>
+            <p><i class="fas fa-code"></i> Данные AniList · Встроенный плеер</p>
         </footer>
     </div>
 
